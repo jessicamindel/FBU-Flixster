@@ -5,7 +5,10 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.jmindel.flixster.models.ImgConfig;
 import com.jmindel.flixster.models.Movie;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -26,8 +29,10 @@ public class MovieListActivity extends AppCompatActivity {
     public static final String TAG = "MovieListActivity";
 
     AsyncHttpClient client;
-    String imageBaseUrl, posterSize;
+    ImgConfig config;
     ArrayList<Movie> movies;
+    RecyclerView rvMovies;
+    MovieAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +40,12 @@ public class MovieListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie_list);
         client = new AsyncHttpClient();
         movies = new ArrayList<>();
+
+        adapter = new MovieAdapter(movies);
+        rvMovies = findViewById(R.id.rvMovies);
+        rvMovies.setAdapter(adapter);
+        rvMovies.setLayoutManager(new LinearLayoutManager(this));
+
         getConfiguration();
     }
 
@@ -50,6 +61,7 @@ public class MovieListActivity extends AppCompatActivity {
                     for (int i = 0; i < results.length(); i++) {
                         Movie m = new Movie(results.getJSONObject(i));
                         movies.add(m);
+                        adapter.notifyItemInserted(movies.size() - 1);
                     }
                     Log.i(TAG, String.format("Loaded %d movies", results.length()));
                 } catch (JSONException e) {
@@ -72,11 +84,11 @@ public class MovieListActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
-                    JSONObject images = response.getJSONObject("images");
-                    imageBaseUrl = images.getString("secure_base_url");
-                    JSONArray posterSizeOptions = images.getJSONArray("poster_sizes");
-                    posterSize = posterSizeOptions.optString(4, "w342");
-                    Log.i(TAG, String.format("Loaded configuration with imageBaseUrl %s and posterSize %s", imageBaseUrl, posterSize));
+                    config = new ImgConfig(response);
+                    Log.i(TAG, String.format("Loaded configuration with imageBaseUrl %s and posterSize %s",
+                            config.getImageBaseUrl(),
+                            config.getPosterSize()));
+                    adapter.setConfig(config);
                     // FIXME: Temporary until fully asynchronous, I think...
                     getNowPlaying();
                 } catch (JSONException e) {

@@ -10,6 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
+import com.jmindel.flixster.models.ImgConfig;
 import com.jmindel.flixster.models.Movie;
 
 import java.util.ArrayList;
@@ -28,6 +32,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     }
 
     ArrayList<Movie> movies;
+    Context context;
+    ImgConfig config;
 
     public MovieAdapter(ArrayList<Movie> movies) {
         this.movies = movies;
@@ -44,7 +50,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Get the context and the inflater
         // LEARN: How are contexts used, and what do they signify?
-        Context context = parent.getContext();
+        context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         // Inflate the movie view into the parent => create the view based on the layout file
         // LEARN: Which root would we be attaching to? The XML root, or something else? And when/why would we want to do that?
@@ -67,10 +73,21 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // Fetch the selected movie
         Movie movie = movies.get(position);
+
         // Load data into ViewHolder
         holder.tvTitle.setText(movie.getTitle());
         holder.tvOverview.setText(movie.getOverview());
-        // TODO: Set image using Glide
+
+        // Load image with config using Glide
+        String imageUrl = config.getImageUrl(config.getPosterSize(), movie.getPosterPath());
+        RequestOptions glideOptions = new RequestOptions()
+                .transforms(new RoundedCorners(15))
+                .placeholder(R.drawable.flicks_movie_placeholder)
+                .error(R.drawable.flicks_movie_placeholder);
+        Glide.with(context)
+             .load(imageUrl)
+             .apply(glideOptions)
+             .into(holder.ivPosterImage);
     }
 
     /**
@@ -80,5 +97,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     @Override
     public int getItemCount() {
         return movies.size();
+    }
+
+    public void setConfig(ImgConfig config) {
+        this.config = config;
     }
 }
