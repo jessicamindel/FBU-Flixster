@@ -1,6 +1,7 @@
 package com.jmindel.flixster;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +21,13 @@ import java.util.ArrayList;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivPosterImage;
+        ImageView ivPosterImage, ivBackdropImage;
         TextView tvTitle, tvOverview;
 
         public ViewHolder(View itemView) {
             super(itemView);
             ivPosterImage = itemView.findViewById(R.id.ivPosterImage);
+            ivBackdropImage = itemView.findViewById(R.id.ivBackdropImage);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvOverview = itemView.findViewById(R.id.tvOverview);
         }
@@ -78,16 +80,31 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         holder.tvTitle.setText(movie.getTitle());
         holder.tvOverview.setText(movie.getOverview());
 
-        // Load image with config using Glide
-        String imageUrl = config.getImageUrl(config.getPosterSize(), movie.getPosterPath());
+        // Based on current orientation, choose image to load and its container
+        // LEARN: Likely bad practice--other better patterns here if we can't use an else to ensure type safety?
+        String imageUrl = null;
+        ImageView iv = null;
+        int placeholderImg = 0;
+        int orientation = context.getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            imageUrl = config.getImageUrl(config.getPosterSize(), movie.getPosterPath());
+            iv = holder.ivPosterImage;
+            placeholderImg = R.drawable.flicks_movie_placeholder;
+        } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            imageUrl = config.getImageUrl(config.getBackdropSize(), movie.getBackdropPath());
+            iv = holder.ivBackdropImage;
+            placeholderImg = R.drawable.flicks_backdrop_placeholder;
+        }
+
+        // Insert image using Glide
         RequestOptions glideOptions = new RequestOptions()
-                .transforms(new RoundedCorners(15))
-                .placeholder(R.drawable.flicks_movie_placeholder)
-                .error(R.drawable.flicks_movie_placeholder);
+                .transforms(new RoundedCorners(8))
+                .placeholder(placeholderImg)
+                .error(placeholderImg);
         Glide.with(context)
              .load(imageUrl)
              .apply(glideOptions)
-             .into(holder.ivPosterImage);
+             .into(iv);
     }
 
     /**
