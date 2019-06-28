@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivPosterImage, ivBackdropImage;
         TextView tvTitle, tvOverview;
+        LinearLayout llMovieItem;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -30,6 +32,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             ivBackdropImage = itemView.findViewById(R.id.ivBackdropImage);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvOverview = itemView.findViewById(R.id.tvOverview);
+            llMovieItem = itemView.findViewById(R.id.llMovieItem);
         }
     }
 
@@ -105,6 +108,17 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
              .load(imageUrl)
              .apply(glideOptions)
              .into(iv);
+
+        // Set up click events
+        holder.llMovieItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO
+                // Create a new intent
+                // Add extras for movie info
+                // Launch the intent
+            }
+        });
     }
 
     /**
