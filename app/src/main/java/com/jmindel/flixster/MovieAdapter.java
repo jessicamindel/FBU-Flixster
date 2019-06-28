@@ -1,6 +1,7 @@
 package com.jmindel.flixster;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,9 +37,17 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         }
     }
 
+    public static final String MOVIE_TITLE = "movieTitle";
+    public static final String MOVIE_OVERVIEW = "movieOverview";
+    public static final String MOVIE_RELEASE_DATE = "movieReleaseDate";
+    public static final String MOVIE_RATING = "movieRating";
+    public static final String MOVIE_BACKDROP_URL = "movieBackdropUrl";
+    public static final int VIEW_REQUEST_CODE = 20;
+
     ArrayList<Movie> movies;
     Context context;
     ImgConfig config;
+    MovieListActivity activity;
 
     public MovieAdapter(ArrayList<Movie> movies) {
         this.movies = movies;
@@ -77,7 +86,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // Fetch the selected movie
-        Movie movie = movies.get(position);
+        final Movie movie = movies.get(position);
 
         // Load data into ViewHolder
         holder.tvTitle.setText(movie.getTitle());
@@ -86,15 +95,17 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         // Based on current orientation, choose image to load and its container
         // LEARN: Likely bad practice--other better patterns here if we can't use an else to ensure type safety?
         String imageUrl = null;
+        final String posterUrl = config.getImageUrl(config.getPosterSize(), movie.getPosterPath());
+        final String backdropUrl = config.getImageUrl(config.getBackdropSize(), movie.getBackdropPath());
         ImageView iv = null;
         int placeholderImg = 0;
         int orientation = context.getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            imageUrl = config.getImageUrl(config.getPosterSize(), movie.getPosterPath());
+            imageUrl = posterUrl;
             iv = holder.ivPosterImage;
             placeholderImg = R.drawable.flicks_movie_placeholder;
         } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            imageUrl = config.getImageUrl(config.getBackdropSize(), movie.getBackdropPath());
+            imageUrl = backdropUrl;
             iv = holder.ivBackdropImage;
             placeholderImg = R.drawable.flicks_backdrop_placeholder;
         }
@@ -113,10 +124,15 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         holder.llMovieItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO
+                // LEARN: It seems like bad practice to launch an intent from an adapter rather than an activity... is that true?
                 // Create a new intent
+                Intent i = new Intent(activity, MovieViewActivity.class);
                 // Add extras for movie info
+                i.putExtra(MOVIE_TITLE, movie.getTitle());
+                i.putExtra(MOVIE_OVERVIEW, movie.getOverview());
+                i.putExtra(MOVIE_BACKDROP_URL, backdropUrl);
                 // Launch the intent
+                activity.startActivityForResult(i, VIEW_REQUEST_CODE);
             }
         });
     }
@@ -132,5 +148,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     public void setConfig(ImgConfig config) {
         this.config = config;
+    }
+
+    public void setActivity(MovieListActivity activity) {
+        this.activity = activity;
     }
 }

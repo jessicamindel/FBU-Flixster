@@ -42,6 +42,8 @@ public class MovieListActivity extends AppCompatActivity {
         movies = new ArrayList<>();
 
         adapter = new MovieAdapter(movies);
+        adapter.setActivity(this);
+
         rvMovies = findViewById(R.id.rvMovies);
         rvMovies.setAdapter(adapter);
         rvMovies.setLayoutManager(new LinearLayoutManager(this));
