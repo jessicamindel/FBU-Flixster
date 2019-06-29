@@ -12,6 +12,7 @@ import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,6 +37,9 @@ public class MovieViewActivity extends AppCompatActivity {
     ImageView ivBackdropImage;
     LinearLayout llRating;
     static final int MAX_RATING = 10;
+
+    public static final int TRAILER_REQUEST_CODE = 30;
+    public static final String MOVIE_ID = "movieId";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,5 +158,11 @@ public class MovieViewActivity extends AppCompatActivity {
         }
         date += year;
         return date;
+    }
+
+    public void onPreview(View view) {
+        Intent i = new Intent(MovieViewActivity.this, MovieTrailerActivity.class);
+        i.putExtra(MovieViewActivity.MOVIE_ID, getIntent().getIntExtra(MovieViewActivity.MOVIE_ID, 0));
+        startActivityForResult(i, TRAILER_REQUEST_CODE);
     }
 }

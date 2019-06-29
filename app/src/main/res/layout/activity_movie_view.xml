@@ -71,7 +71,8 @@
         android:layout_marginTop="16dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivUnderline2">
+        app:layout_constraintTop_toBottomOf="@+id/ivUnderline2"
+        android:onClick="onPreview">
 
         <ImageView
             android:id="@+id/ivPreview"
