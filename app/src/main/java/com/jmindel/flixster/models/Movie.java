@@ -4,13 +4,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Movie {
-    private String title, overview, posterPath, backdropPath;
+    private String title, overview, posterPath, backdropPath, releaseDate;
+    private double rating;
 
     public Movie(JSONObject object) throws JSONException {
         title = object.getString("title");
         overview = object.getString("overview");
         posterPath = object.getString("poster_path");
         backdropPath = object.getString("backdrop_path");
+        releaseDate = object.getString("release_date");
+        rating = object.getDouble("vote_average");
     }
 
     public String getTitle() {
@@ -27,5 +30,13 @@ public class Movie {
 
     public String getBackdropPath() {
         return backdropPath;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public double getRating() {
+        return rating;
     }
 }

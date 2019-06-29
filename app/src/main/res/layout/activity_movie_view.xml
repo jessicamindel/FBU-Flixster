@@ -158,35 +158,35 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/star_full" />
+            app:srcCompat="@drawable/star_empty" />
 
         <ImageView
             android:id="@+id/ivStar2"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/star_full" />
+            app:srcCompat="@drawable/star_empty" />
 
         <ImageView
             android:id="@+id/ivStar3"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/star_full" />
+            app:srcCompat="@drawable/star_empty" />
 
         <ImageView
             android:id="@+id/ivStar4"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/star_full" />
+            app:srcCompat="@drawable/star_empty" />
 
         <ImageView
             android:id="@+id/ivStar5"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/star_full" />
+            app:srcCompat="@drawable/star_empty" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

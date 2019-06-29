@@ -54,7 +54,7 @@ public class MovieListActivity extends AppCompatActivity {
     private void getNowPlaying() {
         String url = API_BASE_URL + "/movie/now_playing";
         RequestParams params = new RequestParams();
-        params.put(API_KEY_PARAM, getString(R.string.api_key));
+        params.put(API_KEY_PARAM, getString(R.string.tmdb_api_key));
         client.get(url, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -81,7 +81,7 @@ public class MovieListActivity extends AppCompatActivity {
     private void getConfiguration() {
         String url = API_BASE_URL + "/configuration";
         RequestParams params = new RequestParams();
-        params.put(API_KEY_PARAM, getString(R.string.api_key));
+        params.put(API_KEY_PARAM, getString(R.string.tmdb_api_key));
         client.get(url, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {

@@ -4,7 +4,7 @@
     android:id="@+id/llMovieItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16px"
+    android:layout_margin="24px"
     android:orientation="horizontal">
 
     <ImageView

@@ -131,6 +131,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                 i.putExtra(MOVIE_TITLE, movie.getTitle());
                 i.putExtra(MOVIE_OVERVIEW, movie.getOverview());
                 i.putExtra(MOVIE_BACKDROP_URL, backdropUrl);
+                i.putExtra(MOVIE_RELEASE_DATE, movie.getReleaseDate());
+                i.putExtra(MOVIE_RATING, movie.getRating());
                 // Launch the intent
                 activity.startActivityForResult(i, VIEW_REQUEST_CODE);
             }
